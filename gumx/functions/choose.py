@@ -37,8 +37,10 @@ def choose(
     :return: List of selected items.
     '''
     
-    raw = utils.run(choose, __args__).stdout.decode('utf-8')
+    raw_items = __args__['items'] = utils.dump(items)
     
-    return raw
+    choices = utils.run(choose, __args__).stdout.decode('utf-8').split('\n')
+    
+    return [i for i, r, c in zip(items, raw_items, choices) if r == c]
 
 # EOF
