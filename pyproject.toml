@@ -1,6 +1,6 @@
 [project]
 name = "gumx"
-version = "0.1"
+version = "0.2"
 description = "Wrapper for GUM"
 authors = [
     {name = "Egsagon", email = "egsagon12@gmail.com"}
