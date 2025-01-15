@@ -70,16 +70,16 @@ def dump_args(func: typing.Callable, args: dict[str, typing.Any]) -> list[str]:
     output = []
     
     for arg, value in args.items():
-        if value in (None, False) or arg == 'style': continue
+        if arg == 'style' or value in (None, False): continue
+        
+        raw = dump(value)
         
         if 'Optional' in str(t[arg]):
             output.append(f'--{arg}')
         
-        raw = dump(value)
-        
         if isinstance(raw, list):
             output += raw
-        else:
+        elif raw != '':
             output.append(raw)
     
     for arg, value in flatten(args.get('style', {})).items():
@@ -88,7 +88,12 @@ def dump_args(func: typing.Callable, args: dict[str, typing.Any]) -> list[str]:
     
     return output
 
-def run(func: typing.Callable, args: dict[str, typing.Any]) -> subprocess.CompletedProcess:
+def run(
+    func: typing.Callable,
+    args: dict[str, typing.Any],
+    throw: bool = True,
+    **proc_kwargs
+) -> subprocess.CompletedProcess:
     '''
     Run a GUM command.
     '''
@@ -97,9 +102,12 @@ def run(func: typing.Callable, args: dict[str, typing.Any]) -> subprocess.Comple
     
     print('[EXEC]', cmd)
     
-    process = subprocess.run(args = cmd, stdout = subprocess.PIPE)
+    process = subprocess.run(**({
+        'args': cmd,
+        'stdout': subprocess.PIPE
+    } | proc_kwargs))
     
-    if process.returncode != 0:
+    if throw and process.returncode != 0:
         raise consts.Error(f'Error code {process.returncode}')
     
     return process

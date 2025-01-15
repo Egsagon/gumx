@@ -22,7 +22,7 @@ def choose(
     timeout  : Flag[int | float    ] = None,
     style    : Flag[Style          ] = None,
     __args__ : dict[str            ] = None
-) -> list[str]:
+) -> list:
     '''
     Choose an option from a list of choices.
     
@@ -41,6 +41,6 @@ def choose(
     
     choices = utils.run(choose, __args__).stdout.decode('utf-8').split('\n')
     
-    return [i for i, r, c in zip(items, raw_items, choices) if r == c]
+    return [i for i, r in zip(items, raw_items) if r in choices]
 
 # EOF
