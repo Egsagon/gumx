@@ -9,12 +9,11 @@ import platformdirs
 
 
 # Installation constants
+SETS = {'amd64': 'x86_64', 'x86': 'i386', 'aarch64': 'arm64'}
 API = 'https://api.github.com/repos/charmbracelet/gum/releases'
 
 OS = platform.system()
-
-ARCH = {'amd64': 'x86_64', 'x86': 'i386', 'aarch64': 'arm64'} \
-    [platform.machine().lower()]
+ARCH = SETS[platform.machine().lower()]
 
 DIR = platformdirs.user_data_dir('gumx')
 os.makedirs(DIR, exist_ok = True)
@@ -31,8 +30,8 @@ class Error(Exception):
     '''
 
 class Color(typing.TypedDict):
-    foreground = None
-    background = None
+    foreground: str | int = None
+    background: str | int = None
 
 class Cursor(Color):
     mode: typing.Literal['blink'] = None
