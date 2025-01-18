@@ -100,8 +100,6 @@ def run(
     
     cmd = [consts.INSTALL, func.__name__] + dump_args(func, args)
     
-    print('[EXEC]', cmd)
-    
     process = subprocess.run(**({
         'args': cmd,
         'stdout': subprocess.PIPE
